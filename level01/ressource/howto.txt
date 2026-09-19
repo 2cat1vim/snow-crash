@@ -1,0 +1,8 @@
+Step 1:
+- Trying to run the level01 binary without a argument result in a crash,
+so we run it with any argument.
+- Looking at the nm && strings of the binary this is 100% a daemon.
+
+Step 2:
+- What process are running now that we started the supposed daemon?
+- Guess what ? our flag lol -> ps aux | grep flag01
