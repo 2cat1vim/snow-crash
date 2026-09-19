@@ -1,0 +1,5 @@
+Step 1: run a string on /opt/snow/crash/level00/hiro
+Litteraly seeing a '.flag_data' wich is a custom attribute
+
+Step 2: run a readelf -p on the '.flag_data'
+The flag pop as: f2av5il02puano7naaf6adaf3a
