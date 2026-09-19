@@ -1,0 +1,2 @@
+Step 1:
+mhhh just "strings" the binary and... the flag is sitting there
