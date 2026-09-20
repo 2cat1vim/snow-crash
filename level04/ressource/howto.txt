@@ -1,0 +1,17 @@
+Okay so now it a .sh, babel.sh! If we run it we are missing permission,
+AGAIN.
+So my first tought was to look if we are running any babel systemctl ? Yes.
+Then i know it will be aproximatly the same as level03.
+babel.timer (30s)
+babel.service wich is running our .sh
+
+Looking at the dir where i have permission to read and write so i can,
+setup a exploit inside the .sh config.
+I find: drwxrwxr-x 2 root babel 4096 Sep 19 22:36 .
+wich give read,write,exec for group and guess what im in the group.
+
+A quick look on internet, and YES you can execute command inside a template.m4.
+syscmd(`cp /home/flag04/.flag /tmp/.flaglol')dnl
+syscmd(`chmod 777 /tmp/.flaglol')dnl
+
+NOTHING HARD
